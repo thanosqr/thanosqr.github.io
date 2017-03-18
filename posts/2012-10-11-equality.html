@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Ten Bit Byte - Equality in Prolog and you</title>
+        <link rel="stylesheet" href="../css/default.css" />
+    </head>
+    <body>
+        <div id="header">
+            <div id="logo">
+                <a href="../">Ten Bit Byte</a>
+            </div>
+            <div id="navigation">
+                <a href="../">Home</a>
+                <a href="../about.html">About</a>
+            </div>
+        </div>
+
+        <div id="content">
+            <h1>Equality in Prolog and you</h1>
+            <div class="info">
+    Posted on October 11, 2012
+    
+</div>
+
+<p>Once upon a time, a friend of mine searched for the equality operator in prolog: he entered <code>=</code> in SWI-Prolog’s predicate search. The results?</p>
+<p><code>(=)/2</code> <code>(=..)/2</code> <code>(=&lt;)/2</code> <code>(==)/2</code> <code>(=@=)/2</code> <code>(=:=)/2</code> <code>(=\=)/2</code></p>
+<p>To be fair, <code>(=&lt;)/2</code> is for comparison, <code>(=\=)/2</code> is not equal and <code>(=../2)</code> is a special operator that is only loosely related to equality. Still, that leaves 4 operators - 5 if we consider the infamous <code>is/2</code>.</p>
+<h3 id="section">=</h3>
+<p>The “assignment” operator (although, as Prolog does not really have assignments, a better name might be unificator): it will try to unify the two terms, instantiating any variables. If it’s not possible to unify them, it will fail.</p>
+<h3 id="section-1">==</h3>
+<p>The closest prolog has to an equality check operator; it will not perform any unifications, just compare the two terms. Two variables with different names (e.g. <code>Foo</code> and <code>Bar</code>) are consider different!</p>
+<p>Much confusion is caused by the fact that the two operators are equivalent if the two terms are ground (i.e. they contain no free variables). In that case, no further unification can be done so <code>=</code> will succeed if they are equal and fail if they are not, just like <code>==</code></p>
+<h3 id="is">is</h3>
+<p>Ah, the infamous <code>is</code>. It will evaluate the expression on its right side and (attempt to) unify the result with the term on its left side. Naturally, this will fail: <code>X+Y is 1+2</code> as the evaluated expression is a number, <code>3</code> and it cannot be matched with <code>X+Y</code> - contrast with <code>X+Y = 1+2</code>, which will result in <code>X = 1</code> and <code>Y = 2</code>. Also, <code>is</code> can be used to check if the evaluated expression is equal to a value (e.g. <code>0 is 1-1</code>).</p>
+<h3 id="section-2">=:=</h3>
+<p>Moving to more exotic operators. This operator accepts two expressions, evaluates them, and returns true if they are equal; otherwise false. Note that an integer will be considered equal to a real (e.g. <code>1 =:= 1.0</code> returns true). Contrast with <code>1 == 1.0</code> which returns false; therefore you cannot always replace <code>X =:= Y</code> with <code>Xi is X, Yi is Y, Xi == Yi</code></p>
+<h3 id="section-3">=@=</h3>
+<p>To quote the manual:</p>
+<pre><code>+Term1 =@= +Term2
+True if Term1 is a variant of (or structurally equivalent to) Term2. Testing for a variant is weaker than equivalence (==/2), but stronger than unification (=/2). Two terms A and B are variants iff there exists a renaming of the variables in A that makes A equivalent (==) to B and vice versa.</code></pre>
+<p>Will you ever need it? Probably not.</p>
+<h3 id="section-4">=..</h3>
+<p>Closing with this operator just because it was mentioned. It is not really an operator related to equality; it is called the <code>univ</code> operator and is used to construct/deconstruct terms:</p>
+<p><code>prolog ?- foo(4,2) =.. L. L = [foo, 4, 2]. ?- X =.. [foo, 4, 2]. X = foo(4, 2).</code></p>
+<p>And you can call X by doing call(X). It’s quite exciting and useful for constructing terms at runtime, with the usual pitfalls of eval-like functions.<br />
+However, I wouldn’t recommend using it, especially if you are new to prolog; if you need to use it, you most likely have a wrong representation of your data - maybe you should construct a list with them or do some pattern matching first.</p>
+<h3 id="dont-panic">Don’t panic</h3>
+<p>Having 3 commonly used operators for equality (and another 3 less used) might be daunting - but it’s a result of the greater flexibility that comes with having uninstantiated variables and no implicit evaluation of arithmetic expressions. Of course, as always, whether it’s actually worth it depends on the given task and the way it’s approached.</p>
+
+        </div>
+
+    </body>
+</html>

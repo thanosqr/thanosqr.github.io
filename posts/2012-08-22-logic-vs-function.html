@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Ten Bit Byte - Functional and Logic programming differences</title>
+        <link rel="stylesheet" href="../css/default.css" />
+    </head>
+    <body>
+        <div id="header">
+            <div id="logo">
+                <a href="../">Ten Bit Byte</a>
+            </div>
+            <div id="navigation">
+                <a href="../">Home</a>
+                <a href="../about.html">About</a>
+            </div>
+        </div>
+
+        <div id="content">
+            <h1>Functional and Logic programming differences</h1>
+            <div class="info">
+    Posted on August 22, 2012
+    
+</div>
+
+<p>When I was first introduced to logic programming it was hard to pinpoint how exactly it was different compared to functional programming. After all they’re both declarative paradigms, and they usually focus on immutability and recursion - however, logic programming offers a whole new approach to programming.</p>
+<h3 id="its-all-about-the-building-blocks">It’s all about the building blocks</h3>
+<p>In my view, the major difference between functional and logic programming is in the “building blocks”: functional programming uses functions while logic programming uses predicates.</p>
+<p>Which leads to the question: what’s the difference between a function and a predicate?</p>
+<h3 id="a-predicate-does-not-have-a-return-value">A predicate does not have a return value</h3>
+<p>But wait, you say, I can just use on of the arguments to get the result - e.g.</p>
+<pre><code>add(X, Y, Result):-
+  Result is X + Y</code></pre>
+<p>Well, for starters, that predicate does not work for all instantiation patterns - it will fail for <code>add(1, X, 2)</code> instead of returning <code>X = 1</code>. You can certainly write prolog programs that way, they’ll compile, they’ll work, but it won’t be logic programming - just like code can follow the imperative paradigm even if it’s written in a functional language.</p>
+<p>In order to truly harness the power of a logic language you need to understand the underlying philosophy: that you are writing how something can be true. Perhaps it depends on the value of some variables - those can be used as arguments, and, when those are left undefined, the goal will be to find the values that would make the clause true.</p>
+<p>Prolog in particular uses a special form of logic clauses, called Horn clauses, that originate in first order logic; hilog uses clauses of higher order logic.</p>
+<p>When you write a prolog predicate you are defining a Horn clause: <code>foo:- bar1, bar2, bar2.</code> means that <code>foo</code> is true if <code>bar1</code>, <code>bar2</code> and <code>bar3</code> are true. But not if and only if; you can have multiple clauses for one predicate, e.g.:</p>
+<pre><code>foo:-
+   bar1.
+foo:-
+  bar2.</code></pre>
+<p>which means that <code>foo</code> is true if <code>bar1</code> is true or if <code>bar2</code> is true.</p>
+<h3 id="going-back">Going back</h3>
+<p>Another difference between logic and functional programming is backtracking. In functional programming, once you enter the body of the function you cannot fail and move to the next definition. For example you can write</p>
+<pre><code>abs(x)--&gt; 
+   if x&gt;0 x else -x</code></pre>
+<p>but you cannot write</p>
+<pre><code>abs(x)--&gt;
+   x&gt;0,
+   x;
+abs(x)--&gt;
+   x.</code></pre>
+<p>On the other hand, in prolog, you could write</p>
+<pre><code>abs(X,R):-
+   X&gt;0,
+   R is X.
+abs(X,R):-
+   R is -X.</code></pre>
+<p>Then, if you call <code>abs(-3,R)</code>, prolog will try the first clause and fail when the execution reaches <code>-3&gt;0</code> - but you won’t get an error! Instead, prolog will try the second clause and return <code>R = 3</code>.</p>
+<p>Of course, it’s not impossible for a functional language to implement something similar (languages such as Curry or Mercury come to mind). In fact, having guards, e.g.:</p>
+<pre><code>abs(x) x&gt;0 --&gt; x;
+abs(x) x=&lt;0 --&gt; -x.</code></pre>
+<p>looks quite similar - however, there’s a fundamental difference: guards are nothing more than syntactic sugar for flow control; the code is split into two “modes”: conditions and expressions, while in logic programming there’s no such separation.</p>
+<h3 id="is-logic-programming-a-superset-of-functional-programming">Is logic programming a superset of functional programming?</h3>
+<p>Some say that logic programming is a superset of functional programming since each function could be expressed as a predicate:</p>
+<p><code>foo(x,y) --&gt; x+y.</code></p>
+<p>could be written as</p>
+<pre><code>foo(X,Y,ReturnValue):-
+   ReturnValue is X+Y.</code></pre>
+<p>But I think that such statements are a bit misleading. Sure, there’s a way to map functions to predicates, but, after all, everything is equivalent to a Turing machine and compiles to machine code - what a programming paradigm is offering is different ways of <em>thinking</em> about the problems and structuring the code.</p>
+<p>I definitely recommend trying a bit of logic programming: it should be a mind-blogging experience, of a similar scale of going from imperative-style programming to functional programming.</p>
+
+        </div>
+
+    </body>
+</html>
