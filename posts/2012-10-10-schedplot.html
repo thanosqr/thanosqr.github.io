@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Ten Bit Byte - Schedplot: a scalability profiler for Erlang programs</title>
+        <link rel="stylesheet" href="../css/default.css" />
+    </head>
+    <body>
+        <div id="header">
+            <div id="logo">
+                <a href="../">Ten Bit Byte</a>
+            </div>
+            <div id="navigation">
+                <a href="../">Home</a>
+                <a href="../about.html">About</a>
+            </div>
+        </div>
+
+        <div id="content">
+            <h1>Schedplot: a scalability profiler for Erlang programs</h1>
+            <div class="info">
+    Posted on October 10, 2012
+    
+</div>
+
+<h2 id="whats-a-schedplot">What’s a Schedplot?</h2>
+<p>Schedplot (__sched__uler __plot__ter) is a profiler for Erlang programs I developed for my thesis during the last year. It visualizes the workload of Erlang’s schedulers, which can be used to detect bottlenecks and scalability issues in multicore architectures.</p>
+<p>In other words, Schedplot aspires to answer a simple question: why a program doesn’t run twice as fast if the number of available processors is doubled?</p>
+<h2 id="this-sounds-familiar-to">This sounds familiar to…</h2>
+<p><a href="https://wiki.haskell.org/ThreadScope">Threadscope (Haskell)</a>. <a href="https://msdn.microsoft.com/en-us/library/dd627193%28v=vs.110%29.aspx">Threads View (VS)</a>. <a href="http://docs.oracle.com/javase/realtime/TSV/JavaRTS-TSV.html">Thread Scheduling Visualizer (Java)</a>. Indeed! But isn’t it awesome that Erlang has schedulers instead of threads? Threadplot just doesn’t sound right…</p>
+<p>## Schedplot example So, without further ado, here’s a screenshot:</p>
+<div class="figure">
+<img src="../images/scheplot1.jpeg" />
+
+</div>
+<p>The profiled program spawns 5 processes: each one calculates a Fibonacci number (28, 29, 30, 31, 32). The program runs in a VM using 4 schedulers (S1-S4). It is trivial to realize why the program doesn’t have ideal speedup; although we have more than 4 processes, their work load is unbalanced and 3 schedulers are inactive while the 4th calculates fib(32)</p>
+<h3 id="how-do-you-know-that-the-last-one-is-fib32">How do you know that the last one is fib(32)?</h3>
+<p>Well, see that red line at the end with the <code>end32</code> label? That’s the result of using <code>schedplot:print/1</code>, which prints a message on the graph (the message is placed on the scheduler on which the process that called it was running). In our case, when a process has finished the calculations it prints <code>endN</code> where N is the Fibonacci number it was calculating.</p>
+<h3 id="so-what-do-we-actually-see-in-the-chart">So what do we actually see in the chart?</h3>
+<div class="figure">
+<img src="../images/scheplot2.jpeg" />
+
+</div>
+<p>Well, no, not really lazy. Each pixel is corresponds not to a single moment (1us); hence, in 10us a scheduler may be inactive for 5us and active for 5us and will be displayed as 50% active.</p>
+<h3 id="what-will-happen-if-in-100us-the-scheduler-is-99-active-but-the-chart-height-is-10pixel">What will happen if in 100us the scheduler is 99% active but the chart height is 10pixel?</h3>
+<p>It will be 9 pixel. The graph has max height if and only if the scheduler is 100% active; otherwise, the visualization could hide significant gaps.</p>
+<p>Symmetrically, the height is zero if and only if the scheduler is 0% active.</p>
+<h2 id="so-now-what">So now what?</h2>
+<p>Well, if you are still interested you can:</p>
+<ul>
+<li>Check the <a href="../files/schedplot-pres.pdf">presentation</a></li>
+<li>Get the <a href="https://github.com/thanosqr/schedplot">code</a></li>
+<li>Read the <a href="http://artemis-new.cslab.ece.ntua.gr:8080/jspui/bitstream/123456789/6427/1/DT2012-0198.pdf#page=7">thesis</a> (Pages 1-6 are in Greek, rest in English)</li>
+</ul>
+
+        </div>
+
+    </body>
+</html>
