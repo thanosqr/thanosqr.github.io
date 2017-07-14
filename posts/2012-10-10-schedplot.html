@@ -10,7 +10,9 @@
     <body>
         <div id="header">
             <div id="logo">
-                <a href="../">Ten Bit Byte</a>
+                <a href="../">
+                    <img src="../images/tbb.png" alt="tenbitbyte">
+                </a>
             </div>
             <div id="navigation">
                 <a href="../">Home</a>
@@ -26,7 +28,7 @@
 </div>
 
 <h2 id="whats-a-schedplot">What’s a Schedplot?</h2>
-<p>Schedplot (__sched__uler __plot__ter) is a profiler for Erlang programs I developed for my thesis during the last year. It visualizes the workload of Erlang’s schedulers, which can be used to detect bottlenecks and scalability issues in multicore architectures.</p>
+<p>Schedplot (SCHEDuler PLOTter) is a profiler for Erlang programs I developed for my thesis during the last year. It visualizes the workload of Erlang’s schedulers, which can be used to detect bottlenecks and scalability issues in multicore architectures.</p>
 <p>In other words, Schedplot aspires to answer a simple question: why a program doesn’t run twice as fast if the number of available processors is doubled?</p>
 <h2 id="this-sounds-familiar-to">This sounds familiar to…</h2>
 <p><a href="https://wiki.haskell.org/ThreadScope">Threadscope (Haskell)</a>. <a href="https://msdn.microsoft.com/en-us/library/dd627193%28v=vs.110%29.aspx">Threads View (VS)</a>. <a href="http://docs.oracle.com/javase/realtime/TSV/JavaRTS-TSV.html">Thread Scheduling Visualizer (Java)</a>. Indeed! But isn’t it awesome that Erlang has schedulers instead of threads? Threadplot just doesn’t sound right…</p>
@@ -48,12 +50,7 @@
 <p>It will be 9 pixel. The graph has max height if and only if the scheduler is 100% active; otherwise, the visualization could hide significant gaps.</p>
 <p>Symmetrically, the height is zero if and only if the scheduler is 0% active.</p>
 <h2 id="so-now-what">So now what?</h2>
-<p>Well, if you are still interested you can:</p>
-<ul>
-<li>Check the <a href="../files/schedplot-pres.pdf">presentation</a></li>
-<li>Get the <a href="https://github.com/thanosqr/schedplot">code</a></li>
-<li>Read the <a href="http://artemis-new.cslab.ece.ntua.gr:8080/jspui/bitstream/123456789/6427/1/DT2012-0198.pdf#page=7">thesis</a> (Pages 1-6 are in Greek, rest in English)</li>
-</ul>
+<p>Well, if you are still interested you can: 1. Check the <a href="../files/schedplot-pres.pdf">presentation</a> 2. Get the <a href="https://github.com/thanosqr/schedplot">code</a> 3. Read the <a href="http://artemis-new.cslab.ece.ntua.gr:8080/jspui/bitstream/123456789/6427/1/DT2012-0198.pdf#page=7">thesis</a> (Pages 1-6 are in Greek, rest in English)</p>
 
         </div>
 
